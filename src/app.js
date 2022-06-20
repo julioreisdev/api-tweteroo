@@ -8,7 +8,31 @@ server.use(express.json());
 const users = [];
 const tweets = [];
 
+function isDataInvalidUndefiened(value1, value2) {
+  if (value1 === undefined || value2 === undefined) {
+    return true;
+  }
+  return false;
+}
+function isDataInvalidEmpty(value1, value2) {
+  if (value1 === "" || value2 === "") {
+    return true;
+  }
+  return false;
+}
+
 server.post("/sign-up", (request, response) => {
+  if (
+    isDataInvalidEmpty(request.body.username, request.body.avatar) &&
+    !isDataInvalidUndefiened(request.body.username, request.body.avatar)
+  ) {
+    response.send("Todos os campos são obrigatórios!");
+    return;
+  }
+  if (isDataInvalidUndefiened(request.body.username, request.body.avatar)) {
+    response.sendStatus(400);
+    return;
+  }
   users.push({
     username: request.body.username,
     avatar: request.body.avatar,
@@ -16,6 +40,17 @@ server.post("/sign-up", (request, response) => {
   response.send("OK");
 });
 server.post("/tweets", (request, response) => {
+  if (
+    isDataInvalidEmpty(request.body.username, request.body.tweet) &&
+    !isDataInvalidUndefiened(request.body.username, request.body.tweet)
+  ) {
+    response.send("Todos os campos são obrigatórios!");
+    return;
+  }
+  if (isDataInvalidUndefiened(request.body.username, request.body.tweet)) {
+    response.sendStatus(400);
+    return;
+  }
   tweets.push({
     username: request.body.username,
     tweet: request.body.tweet,
